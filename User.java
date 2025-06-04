@@ -1,35 +1,43 @@
-package halreward.tubes;
+package com.isiair.isiairmobile;
 
-public class User {
-	 private int id;
-	    private String name;
-	    private String email;
-	    private int points;
-
-	    public User(int id, String name, String email, int points) {
-	        this.id = id;
-	        this.name = name;
-	        this.email = email;
-	        this.points = points;
-	    }
-
-	    public int getPoints() {
-	        return points;
-	    }
-
-	    public void decreasePoints(int amount) {
-	        points -= amount;
-	    }
-
-	    public void addPoints(int amount) {
-	        points += amount;
-	    }
-
-	    public String getName() {
-	        return name;
-	    }
-	    public void inisialisasiUser() {
-	    	
-	    }
+public class User extends Profile{
+	private int phoneNumber;
+	private char gender;
+	private String birthday;
+	
+	public User(int id, String name, String email, String password, int phoneNumber, char gender, String birthday) {
+		super(id, name, email, password);
+		this.phoneNumber = phoneNumber;
+		this.gender = gender;
+		this.birthday = birthday;
 	}
 
+	public int getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(int phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public char getGender() {
+		return gender;
+	}
+
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+	
+	public void order(Galon galon, int quantity, String address) {
+		galon.reduceStock(quantity);
+		System.out.println(quantity + " buah galon " + galon.getBrand() + " akan diantar ke " + address);
+	}
+}
