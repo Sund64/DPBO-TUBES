@@ -8,7 +8,7 @@ public class Galon {
 	private int stock;
 	
 	
-	public galonisi(int id, double volume, String brand, int price, int stock) {
+	public Galon(int id, double volume, String brand, int price, int stock) {
 		super();
 		this.id = id;
 		this.volume = volume;
