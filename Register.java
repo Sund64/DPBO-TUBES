@@ -7,28 +7,14 @@ public class Register {
     private String password;
     private String address;
     
-    private static ArrayList<String> registeredNames = new ArrayList<>(); 
+    private static ArrayList<String> registeredNames = new ArrayList<>();
 
-    
-    static class InvalidEmailException extends Exception {
-        public InvalidEmailException(String message) {
-            super(message);
-        }
-    }
-
-   
-    static class NameAlreadyUsedException extends Exception {
-        public NameAlreadyUsedException(String message) {
-            super(message);
-        }
-    }
-
-    public Register(String name, String email, String address, String password) throws InvalidEmailException, NameAlreadyUsedException {
+    public Register(String name, String email, String address, String password) throws Exception {
         if (!email.endsWith("@gmail.com")) {
-            throw new InvalidEmailException("Email harus menggunakan domain @gmail.com");
+            throw new Exception("Email harus menggunakan domain @gmail.com");
         }
         if (AlreadyUse(name)) {
-            throw new NameAlreadyUsedException("Nama ini sudah digunakan.");
+            throw new Exception("Nama ini sudah digunakan.");
         }
         this.name = name;
         this.email = email;
@@ -65,7 +51,7 @@ public class Register {
 
             try {
                 user = new Register(name, email, address, password);
-            } catch (InvalidEmailException | NameAlreadyUsedException e) {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
