@@ -2,18 +2,31 @@ package DPBO.TUBES;
 
 public class Pembayaran {
 	private int price;
-	private String metode;
-	public Pembayaran(int price, String metode) {
+	private int id;
+	private String metodePembayaran;
+	private String status;
+	public Pembayaran(int price, String metodePembayaran, String status, int id) {
 		super();
 		this.price = price;
-		this.metode = metode;
+		this.metodePembayaran = metodePembayaran;
+		this.status = status;
+		this.id = id;
 	}
+
 	public int getPrice() {
 		return price;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public String getMetodePembayaran() {
+		return metodePembayaran;
+	}
+	public void prosesPembayaran() {
+		System.out.println("Menunggu pembayaran dari " + this.id);
+	}
 	public void printInfo() {
-		System.out.println("Pilih metode pembayaran");
-		System.out.println("QRIS/CASH");
+		System.out.println("Pembayaran id: " + this.id + " sudah selesai");
 	}
 	
 	
