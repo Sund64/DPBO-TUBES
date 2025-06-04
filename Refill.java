@@ -1,5 +1,3 @@
-package halgalon;
-
 public class Refill extends Galon{
 	private int refillPrice;
 

@@ -1,5 +1,3 @@
-package com.isiair.isiairmobile;
-
 public class Chat {
 	private String message;
 	private Profile sender;

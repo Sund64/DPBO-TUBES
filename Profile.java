@@ -1,5 +1,3 @@
-package com.isiair.isiairmobile;
-
 public class Profile {
 	private int id;
 	private String name, email, password;

@@ -1,5 +1,3 @@
-package com.isiair.isiairmobile;
-
 public class ChatChannel {
 	private int id;
 	private Admin admin;

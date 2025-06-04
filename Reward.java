@@ -1,5 +1,3 @@
-package halreward.tubes;
-
 public class Reward {
 	private int id;
     private String name;

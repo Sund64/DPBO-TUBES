@@ -1,5 +1,3 @@
-package com.isiair.isiairmobile;
-
 public class Admin extends Profile{
 
 	private String department;

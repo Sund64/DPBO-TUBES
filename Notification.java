@@ -1,4 +1,3 @@
-package halreward.tubes;
 import java.util.Date;
 
 public class Notification {

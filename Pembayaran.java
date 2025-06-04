@@ -1,5 +1,3 @@
-package DPBO.TUBES;
-
 public class Pembayaran {
 	private int price;
 	private int id;

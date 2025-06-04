@@ -1,5 +1,3 @@
-package com.isiair.isiairmobile;
-
 public class User extends Profile{
 	private int phoneNumber;
 	private char gender;

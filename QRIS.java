@@ -1,5 +1,3 @@
-package DPBO.TUBES;
-
 public class QRIS extends Pembayaran{
 	private int qrisID;
 	

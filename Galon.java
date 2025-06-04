@@ -1,5 +1,3 @@
-package halgalon;
-
 public class Galon {
 	private int id;
 	private double volume;
