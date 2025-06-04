@@ -1,6 +1,6 @@
 package halgalon;
 
-public class galonisi {
+public class Galon {
 	private int id;
 	private double volume;
 	private String brand;
