@@ -7,16 +7,16 @@ public class Register {
     private String password;
     private String address;
     
-    private static ArrayList<String> registeredNames = new ArrayList<>(); // Menyimpan daftar nama yang sudah digunakan
+    private static ArrayList<String> registeredNames = new ArrayList<>(); 
 
-    // Custom exception untuk email tidak valid
+    
     static class InvalidEmailException extends Exception {
         public InvalidEmailException(String message) {
             super(message);
         }
     }
 
-    // Custom exception untuk nama yang sudah digunakan
+   
     static class NameAlreadyUsedException extends Exception {
         public NameAlreadyUsedException(String message) {
             super(message);
@@ -34,7 +34,7 @@ public class Register {
         this.email = email;
         this.address = address;
         this.password = password;
-        registeredNames.add(name); // Menyimpan nama ke dalam daftar
+        registeredNames.add(name); 
         System.out.println("Registrasi berhasil.");
     }
 
