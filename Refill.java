@@ -1,6 +1,6 @@
 package halgalon;
 
-public class Refill extends galonisi{
+public class Refill extends Galon{
 	private int refillPrice;
 
 	public Refill(int id, double volume, String brand, int price, int stock, int refillPrice) {
