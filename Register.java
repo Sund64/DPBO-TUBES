@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Register extends User implements Identity {
     private String address;
     
-    private static ArrayList<String> registeredNames = new ArrayList<>(); // Menyimpan daftar nama yang sudah digunakan
+    private static ArrayList<String> registeredNames = new ArrayList<>();
 
     public Register(int id, String name, String email, String password, int phoneNumber, char gender, String birthday, String address) throws Exception {
         super(id, name, email, password, phoneNumber, gender, birthday);
@@ -14,7 +14,7 @@ public class Register extends User implements Identity {
             throw new Exception("Nama ini sudah digunakan.");
         }
         this.address = address;
-        registeredNames.add(name); // Menyimpan nama ke dalam daftar
+        registeredNames.add(name);
         System.out.println("Registrasi berhasil.");
     }
 
