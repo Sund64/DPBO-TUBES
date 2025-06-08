@@ -13,21 +13,21 @@ public class MainNotifikasiPembayaran {
         notif2.printInfo();
 
         System.out.println("\n--- Menguji Pembayaran ---");
-        Pembayaran pembayaran1 = new Pembayaran(150000, "Transfer Bank", "Pending", 101);
-        pembayaran1.prosesPembayaran();
+        Pembayaran pembayaran1 = new Pembayaran(150000, "Transfer Bank");
+        // pembayaran1.prosesPembayaran();
         System.out.println("Harga: " + pembayaran1.getPrice());
-        System.out.println("Metode Pembayaran: " + pembayaran1.getMetodePembayaran());
-        System.out.println("Status: " + pembayaran1.getStatus());
+        System.out.println("Metode Pembayaran: " + pembayaran1.getMetode());
+        // System.out.println("Status: " + pembayaran1.getStatus());
         pembayaran1.printInfo();
 
         System.out.println("\n--- Menguji QRIS ---");
-        QRIS qris1 = new QRIS(75000, "QRIS", "Selesai", 201, 123456789);
-        qris1.prosesPembayaran();
-        qris1.tampilkanQr();
-        qris1.verifikasiPembayaran();
+        QRIS qris1 = new QRIS(75000, 123456789);
+        // qris1.prosesPembayaran();
+        // qris1.tampilkanQr();
+        // qris1.verifikasiPembayaran();
         qris1.printInfo();
         System.out.println("Harga QRIS: " + qris1.getPrice());
-        System.out.println("Metode Pembayaran QRIS: " + qris1.getMetodePembayaran());
-        System.out.println("Status QRIS: " + qris1.getStatus());
+        System.out.println("Metode Pembayaran QRIS: " + qris1.getMetode());
+        // System.out.println("Status QRIS: " + qris1.getStatus());
     }
 }

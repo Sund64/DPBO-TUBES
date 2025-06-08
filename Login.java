@@ -31,7 +31,7 @@ public class Login {
     public static boolean login(String username, String password, ArrayList<Register> daftarRegister) {
         for (Register reg : daftarRegister) {
             // Pastikan Register punya getUsername() dan getPassword()
-            if (reg.getUsername().equals(username) && reg.getPassword().equals(password)) {
+            if (reg.getName().equals(username) && reg.getPassword().equals(password)) {
                 return true; // Login berhasil
             }
         }

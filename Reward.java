@@ -17,8 +17,7 @@ public class Reward {
         if (user.getPoints() >= pointCost) {
             user.decreasePoints(pointCost);
             this.receiver = user;
-            Notification notif = new Notification(user, "Reward \"" + name + "\" berhasil ditukar!");
-            notif.send();
+            System.out.println("Reward \"" + name + "\" berhasil ditukar!");
         } else {
             System.out.println("Poin tidak mencukupi untuk menukar reward.");
         }
@@ -31,5 +30,13 @@ public class Reward {
         } else {
             System.out.println("Belum ditebus.");
         }
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getPointCost() {
+        return this.pointCost;
     }
 }

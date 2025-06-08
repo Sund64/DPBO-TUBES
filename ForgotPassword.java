@@ -12,6 +12,7 @@ public class ForgotPassword extends User implements Identity {
 
     private int generateOTP() {
         return 1000 + RANDOM.nextInt(9000);
+    }
 
     public int getOTPCode() {
         return OTPCode;

@@ -1,14 +1,8 @@
-package halreward.tubes;
 import java.util.Scanner;
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-    	Scanner scanner = new Scanner(System.in);
+
+public class Mainreward {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
         User user1 = new User(1, "Fadhan", "fadhan@email.com", 150);
 

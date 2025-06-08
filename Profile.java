@@ -1,6 +1,7 @@
 public class Profile implements Identity {
     private int id;
-    private String name, email, password;
+    private String name, email;
+    protected String password;
     
     public Profile(int id, String name, String email, String password) {
         this.id = id;
