@@ -1,64 +1,61 @@
-package com.example;
-
-import javafx.application.Application;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
-import java.util.Optional;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-
+package halreward.tubes;
+import java.util.Scanner;
 /**
- * JavaFX App
+ * Hello world!
+ *
  */
-public class App extends Application {
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	Scanner scanner = new Scanner(System.in);
 
-    @Override
-    public void start(Stage stage) {
-        // Pilihan metode pembayaran
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Pilih Metode Pembayaran");
-        alert.setHeaderText("Metode Pembayaran");
-        alert.setContentText("Pilih metode pembayaran yang diinginkan:");
+        User user1 = new User(1, "Fadhan", "fadhan@email.com", 150);
 
-        ButtonType cashBtn = new ButtonType("Cash");
-        ButtonType qrisBtn = new ButtonType("QRIS");
-        alert.getButtonTypes().setAll(cashBtn, qrisBtn);
+        Reward reward1 = new Reward(101, "Gratis Ongkir", 100, "Berlaku untuk 1x refill galon");
+        Reward reward2 = new Reward(102, "Gratis Refil", 50, "Refil galon gratis 1x");
+        Reward reward3 = new Reward(103, "Promo Diskon", 25, "Diskon 10% untuk isi ulang berikutnya");
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == qrisBtn) {
-            // Tampilkan halaman QRIS dengan tombol konfirmasi
-            QRIS qris = new QRIS(150000, 12345);
-            VBox root = qris.getQRVBox();
-            Button konfirmasiBtn = new Button("Konfirmasi Pembayaran");
-            root.getChildren().add(konfirmasiBtn);
+        int choice;
+        do {
+            System.out.println("\n-------------- MENU REWARD --------------");
+            System.out.println("Selamat Datang Dihalaman Reward Kami " + user1.getName());
+            System.out.println("Poin Anda saat ini: " + user1.getPoints());
+            System.out.println("1. Gratis Ongkir (100 poin)");
+            System.out.println("2. Gratis Refil (50 poin)");
+            System.out.println("3. Promo Diskon (25 poin)");
+            System.out.println("0. Keluar");
+            System.out.print("Pilih reward yang ingin ditebus (0/1/2/3): ");
+            choice = scanner.nextInt();
 
-            Scene scene = new Scene(root, 350, 300);
-            Stage qrStage = new Stage();
-            qrStage.setTitle("Pembayaran QRIS");
-            qrStage.setScene(scene);
-            qrStage.show();
+            Reward selectedReward = null;
 
-            konfirmasiBtn.setOnAction(e -> {
-                qrStage.close();
-                Notification.showInfo(
-                    "Pembayaran Berhasil",
-                    "Sukses",
-                    "Pembayaran QRIS berhasil dikonfirmasi!"
-                );
-            });
-        } else if (result.isPresent() && result.get() == cashBtn) {
-            Notification.showInfo(
-                "Pembayaran Tunai",
-                "Cash",
-                "Silakan bayar secara tunai kepada kasir."
-            );
-        }
+            switch (choice) {
+                case 1:
+                    selectedReward = reward1;
+                    break;
+                case 2:
+                    selectedReward = reward2;
+                    break;
+                case 3:
+                    selectedReward = reward3;
+                    break;
+                case 0:
+                    System.out.println("Terima kasih telah menggunakan sistem reward.");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid.");
+                    continue;
+            }
+
+            if (selectedReward != null) {
+                System.out.println("\n----------- Proses Redeem ---------------");
+                selectedReward.redeem(user1);
+                System.out.println("Sisa poin Anda: " + user1.getPoints());
+            }
+        } while (choice != 0);
+
+        scanner.close();
     }
-
-    public static void main(String[] args) {
-        launch();
-    }
-
 }
+
