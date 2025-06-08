@@ -60,3 +60,30 @@ public class Register implements Identity {
         scanner.close();
 	}
 }
+
+import java.util.Scanner;
+
+public class MainRegister {
+	public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Register user = null;
+        while (user == null) {
+            System.out.print("Masukkan nama: ");
+            String name = scanner.nextLine();
+            System.out.print("Masukkan email: ");
+            String email = scanner.nextLine();
+            System.out.print("Masukkan alamat: ");
+            String address = scanner.nextLine();
+            System.out.print("Masukkan password: ");
+            String password = scanner.nextLine();
+
+            try {
+                user = new Register(name, email, address, password);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        user.printInfo();
+        scanner.close();
+    }
+}
