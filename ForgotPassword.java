@@ -1,48 +1,48 @@
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.Random;
 
-public class ForgotPassword {
+public class ForgotPassword extends User implements Identity {
     private int OTPCode;
-    private String email;
-    private static final int FIXED_OTP_CODE = 1234;
+    
+    private static final Random RANDOM = new Random();
 
-    public ForgotPassword(String email) {
-        this.email = email;
-        this.OTPCode = FIXED_OTP_CODE;
+    public ForgotPassword(int id, String name, String email, String password, int phoneNumber, char gender, String birthday) {
+        super(id, name, email, password, phoneNumber, gender, birthday);
+        this.OTPCode = generateOTP();
     }
+
+    private int generateOTP() {
+        return 1000 + RANDOM.nextInt(9000);
 
     public int getOTPCode() {
         return OTPCode;
     }
 
-    public String getEmail() {
-        return email;
+    public void resetPasswordWithOTP(int inputOTP, String newPassword) {
+        if (inputOTP == OTPCode) {
+            super.resetPassword(newPassword);
+            System.out.println("Password berhasil diubah dengan OTP.");
+        } else {
+            System.out.println("Kode OTP tidak valid.");
+        }
     }
 
     @Override
-    public String toString() {
-        return "Kode OTP Anda adalah: " + OTPCode;
+    public int getId() {
+        return super.getId();
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<String> emailList = new ArrayList<>(); 
+    @Override
+    public String getName() {
+        return super.getName();
+    }
 
-        String email;
-        do {
-            System.out.print("Masukkan email Anda: ");
-            email = scanner.nextLine();
+    @Override
+    public String getEmail() {
+        return super.getEmail();
+    }
 
-            if (!email.endsWith("@gmail.com")) {
-                System.out.println("Email tidak valid! Masukkan email yang benar (harus @gmail.com).");
-            } else {
-                emailList.add(email);
-            }
-        } while (!email.endsWith("@gmail.com"));
-
-        ForgotPassword fp = new ForgotPassword(email);
-        System.out.println(fp);
-
-        scanner.close();
+    @Override
+    public String getPassword() {
+        return super.getPassword();
     }
 }
