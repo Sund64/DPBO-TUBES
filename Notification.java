@@ -1,4 +1,3 @@
-package Gab;
 import java.util.Date;
 
 public class Notification {
