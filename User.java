@@ -1,41 +1,61 @@
-public class User extends Profile{
-	private int phoneNumber;
-	private char gender;
-	private String birthday;
-	
-	public User(int id, String name, String email, String password, int phoneNumber, char gender, String birthday) {
-		super(id, name, email, password);
-		this.phoneNumber = phoneNumber;
-		this.gender = gender;
-		this.birthday = birthday;
-	}
+public class User extends Profile implements Identity {
+    private int phoneNumber;
+    private char gender;
+    private String birthday;
+    
+    public User(int id, String name, String email, String password, int phoneNumber, char gender, String birthday) {
+        super(id, name, email, password);
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.birthday = birthday;
+    }
 
-	public int getPhoneNumber() {
-		return phoneNumber;
-	}
+    @Override
+    public int getId() {
+        return super.getId();
+    }
 
-	public void setPhoneNumber(int phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+    @Override
+    public String getName() {
+        return super.getName();
+    }
 
-	public char getGender() {
-		return gender;
-	}
+    @Override
+    public String getEmail() {
+        return super.getEmail();
+    }
 
-	public void setGender(char gender) {
-		this.gender = gender;
-	}
+    @Override
+    public String getPassword() {
+        return super.getPassword();
+    }
 
-	public String getBirthday() {
-		return birthday;
-	}
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
 
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
-	
-	public void order(Galon galon, int quantity, String address) {
-		galon.reduceStock(quantity);
-		System.out.println(quantity + " buah galon " + galon.getBrand() + " akan diantar ke " + address);
-	}
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public char getGender() {
+        return gender;
+    }
+
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+    
+    public void order(Galon galon, int quantity, String address) {
+        galon.reduceStock(quantity);
+        System.out.println(quantity + " buah galon " + galon.getBrand() + " akan diantar ke " + address);
+    }
 }
