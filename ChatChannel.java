@@ -22,7 +22,7 @@ class ChatChannel {
     }
 
     public void printChatHistory() {
-        System.out.println("\nChat History - Channel ID: " + id);
+        System.out.println("\nChat Admin - Channel ID: " + id);
         for (Chat chat : chats) {
             chat.printInfo();
         }
