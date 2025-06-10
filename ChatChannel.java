@@ -1,18 +1,30 @@
-public class ChatChannel {
-	private int id;
-	private Admin admin;
-	private User user;
-	
-	public ChatChannel(int id, Admin admin, User user) {
-		super();
-		this.id = id;
-		this.admin = admin;
-		this.user = user;
-	}
-	
-	public void printInfo() {
-		System.out.println("id: " + id);
-		System.out.println("Admin: " + admin.getName());
-		System.out.println("User: " + user.getName());
-	}
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+class ChatChannel {
+    private int id;
+    private Admin admin;
+    private User user;
+    private List<Chat> chats;
+
+    public ChatChannel(int id, Admin admin, User user) {
+        this.id = id;
+        this.admin = admin;
+        this.user = user;
+        this.chats = new ArrayList<>();
+    }
+
+    public void sendMessage(String message, Profile sender) {
+        Chat chat = new Chat(message, sender);
+        chats.add(chat);
+    }
+
+    public void printChatHistory() {
+        System.out.println("\nChat Admin - Channel ID: " + id);
+        for (Chat chat : chats) {
+            chat.printInfo();
+        }
+    }
 }
