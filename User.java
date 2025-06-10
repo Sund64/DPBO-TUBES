@@ -1,10 +1,12 @@
 public class User extends Profile implements Identity {
-    private int phoneNumber;
+    // Ubah tipe phoneNumber dari int ke long
+    protected long phoneNumber;
     private char gender;
     private String birthday;
     private int points; // Tambahan untuk sistem reward
 
-    public User(int id, String name, String email, String password, int phoneNumber, char gender, String birthday) {
+    // Ubah konstruktor agar phoneNumber bertipe long
+    public User(int id, String name, String email, String password, long phoneNumber, char gender, String birthday) {
         super(id, name, email, password);
         this.phoneNumber = phoneNumber;
         this.gender = gender;
@@ -41,11 +43,11 @@ public class User extends Profile implements Identity {
         return super.getPassword();
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

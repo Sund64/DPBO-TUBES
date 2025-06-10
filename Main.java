@@ -7,6 +7,22 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        // Tambahkan akun test ke daftarRegister
+        try {
+            daftarRegister.add(new Register(
+                999, // id
+                "Test User",
+                "testuser@gmail.com",
+                "test123",
+                8123456789012L, // nomor telepon contoh
+                'L',
+                "2000-01-01",
+                "Jl. Test No. 1"
+            ));
+        } catch (Exception e) {
+            // Tidak perlu aksi, hanya untuk inisialisasi test
+        }
+
         // Data galon & refill
         Galon[] galons = {
             new Galon(1, 19.0, "Aqua", 50000, 10),
@@ -29,185 +45,369 @@ public class Main {
         // Data delivery
         HashMap<Integer, Delivery> orders = new HashMap<>();
 
-        while (true) {
-            System.out.println("\n===== MENU UTAMA isiAir =====");
+        // Tambahkan keranjang global
+        Keranjang keranjang = new Keranjang();
+
+        // ArrayList untuk menampung data pembelian dari menu beli galon
+        ArrayList<String> daftarPembelianGalon = new ArrayList<>();
+
+        // === LOGIN/REGISTER LOOP ===
+        while (currentUser == null) {
+            System.out.println("\n===== SELAMAT DATANG DI isiAir =====");
             System.out.println("1. Register");
             System.out.println("2. Login");
-            System.out.println("3. Reward");
-            System.out.println("4. Galon");
-            System.out.println("5. Delivery Status");
-            System.out.println("6. Lupa Password");
-            System.out.println("7. Demo Notifikasi & Pembayaran");
-            System.out.println("8. Demo Galon");
-            System.out.println("9. Keluar");
+            System.out.println("3. Lupa Password");
+            System.out.println("4. Keluar");
             System.out.print("Pilih menu: ");
-            int menu = scanner.nextInt();
-            scanner.nextLine();
+            String menuInput = scanner.nextLine();
+            int menu;
+            try {
+                menu = Integer.parseInt(menuInput);
+            } catch (NumberFormatException e) {
+                System.out.println("Pilihan anda harus angka sesuai yang ada di menu");
+                continue;
+            }
 
             if (menu == 1) {
                 // Register
                 try {
-                    System.out.print("Nama: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Email: ");
-                    String email = scanner.nextLine();
-                    System.out.print("Alamat: ");
-                    String address = scanner.nextLine();
-                    System.out.print("Password: ");
-                    String password = scanner.nextLine();
-                    System.out.print("Nomor Telepon: ");
-                    int phoneNumber = Integer.parseInt(scanner.nextLine());
-                    System.out.print("Jenis Kelamin (L/P): ");
-                    String genderInput = scanner.nextLine();
-                    char gender = genderInput.isEmpty() ? 'U' : genderInput.charAt(0);
-                    System.out.print("Tanggal Lahir (yyyy-mm-dd): ");
-                    String birthday = scanner.nextLine();
+                    String name;
+                    while (true) {
+                        System.out.print("Nama: ");
+                        name = scanner.nextLine();
+                        if (name.isEmpty()) {
+                            System.out.println("Nama tidak boleh kosong, Harap isi terlebih dahulu");
+                        } else {
+                            break;
+                        }
+                    }
+                    String email;
+                    while (true) {
+                        System.out.print("Email (gunakan @gmail.com): ");
+                        email = scanner.nextLine();
+                        if (email.isEmpty()) {
+                            System.out.println("Email tidak boleh kosong, Harap isi terlebih dahulu");
+                        } else if (!email.endsWith("@gmail.com")) {
+                            System.out.println("Email harus menggunakan domain @gmail.com");
+                        } else {
+                            boolean emailExists = false;
+                            for (Register reg : daftarRegister) {
+                                if (reg.getEmail().equals(email)) {
+                                    emailExists = true;
+                                    break;
+                                }
+                            }
+                            if (emailExists) {
+                                System.out.println("Email sudah terdaftar, silakan gunakan email lain.");
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    String address;
+                    while (true) {
+                        System.out.print("Alamat: ");
+                        address = scanner.nextLine();
+                        if (address.isEmpty()) {
+                            System.out.println("Alamat tidak boleh kosong, Harap isi terlebih dahulu");
+                        } else {
+                            break;
+                        }
+                    }
+                    String password;
+                    while (true) {
+                        System.out.print("Password: ");
+                        password = scanner.nextLine();
+                        if (password.isEmpty()) {
+                            System.out.println("Password tidak boleh kosong, Harap isi terlebih dahulu");
+                        } else {
+                            break;
+                        }
+                    }
+                    String phoneInput;
+                    long phoneNumber;
+                    while (true) {
+                        System.out.print("Nomor Telepon: ");
+                        phoneInput = scanner.nextLine();
+                        if (phoneInput.isEmpty()) {
+                            System.out.println("Nomor Telepon tidak boleh kosong, Harap isi terlebih dahulu");
+                            continue;
+                        }
+                        if (!phoneInput.matches("\\d+")) {
+                            System.out.println("Harap masukan nomor telepon yang benar");
+                            continue;
+                        }
+                        if (phoneInput.length() > 13) {
+                            System.out.println("Maksimal nomor telepon hanya 13 digit");
+                            continue;
+                        }
+                        boolean phoneExists = false;
+                        for (Register reg : daftarRegister) {
+                            if (String.valueOf(reg.getPhoneNumber()).equals(phoneInput)) {
+                                phoneExists = true;
+                                break;
+                            }
+                        }
+                        if (phoneExists) {
+                            System.out.println("nomor telepon sudah digunakan");
+                            continue;
+                        }
+                        try {
+                            phoneNumber = Long.parseLong(phoneInput);
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Nomor telepon tidak valid. Gunakan hanya angka.");
+                        }
+                    }
+                    String genderInput;
+                    char gender;
+                    while (true) {
+                        System.out.print("Jenis Kelamin (L/P): ");
+                        genderInput = scanner.nextLine();
+                        if (genderInput.isEmpty()) {
+                            System.out.println("Jenis Kelamin tidak boleh kosong, Harap isi terlebih dahulu");
+                            continue;
+                        }
+                        char genderChar = Character.toUpperCase(genderInput.charAt(0));
+                        if (genderChar != 'L' && genderChar != 'P') {
+                            System.out.println("Yang anda masukan tidak valid, Harap masukaln (L/P)");
+                            continue;
+                        }
+                        gender = genderChar;
+                        break;
+                    }
+                    String birthday;
+                    while (true) {
+                        System.out.print("Tanggal Lahir (yyyy-mm-dd): ");
+                        birthday = scanner.nextLine();
+                        if (birthday.isEmpty()) {
+                            System.out.println("Tanggal Lahir tidak boleh kosong, Harap isi terlebih dahulu");
+                            continue;
+                        }
+                        // Hilangkan semua karakter selain angka
+                        String digitsOnly = birthday.replaceAll("[^0-9]", "");
+                        if (digitsOnly.length() != 8) {
+                            System.out.println("Tanggal lahir harus 8 digit angka (format: yyyy-mm-dd atau yyyymmdd)");
+                            continue;
+                        }
+                        if (!digitsOnly.matches("\\d{8}")) {
+                            System.out.println("Tanggal lahir harus berupa angka");
+                            continue;
+                        }
+                        // Jika user tidak pakai '-', formatkan ke yyyy-mm-dd
+                        if (!birthday.contains("-")) {
+                            birthday = digitsOnly.substring(0, 4) + "-" + digitsOnly.substring(4, 6) + "-" + digitsOnly.substring(6, 8);
+                        }
+                        break;
+                    }
 
                     Register reg = new Register(
                         daftarRegister.size() + 1, // id
                         name,
                         email,
                         password,
-                        phoneNumber,
+                        phoneNumber, // gunakan long, jangan cast ke int
                         gender,
                         birthday,
                         address
                     );
                     daftarRegister.add(reg);
                     reg.printInfo();
+                    System.out.println("Silakan login untuk melanjutkan.");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             } else if (menu == 2) {
                 // Login
-                System.out.print("Nama: ");
-                String name = scanner.nextLine();
-                System.out.print("Password: ");
-                String password = scanner.nextLine();
-                boolean found = false;
-                for (Register reg : daftarRegister) {
-                    if (reg.getName().equals(name) && reg.getPassword().equals(password)) {
-                        currentUser = reg;
-                        found = true;
+                while (true) {
+                    System.out.println("Ketik 0 pada Email atau Password untuk kembali.");
+                    String email;
+                    while (true) {
+                        System.out.print("Email: ");
+                        email = scanner.nextLine();
+                        if (email.equals("0")) break;
+                        if (email.isEmpty()) {
+                            System.out.println("email tidak boleh kosong");
+                            continue;
+                        }
+                        if (!email.endsWith("@gmail.com")) {
+                            System.out.println("harus menggunakan domain @gmail.com");
+                            continue;
+                        }
+                        break;
+                    }
+                    if (email.equals("0")) break;
+                    String password;
+                    while (true) {
+                        System.out.print("Password: ");
+                        password = scanner.nextLine();
+                        if (password.equals("0")) break;
+                        if (password.isEmpty()) {
+                            System.out.println("password tidak boleh kosong");
+                            continue;
+                        }
+                        break;
+                    }
+                    if (password.equals("0")) break;
+                    Register regFound = null;
+                    for (Register reg : daftarRegister) {
+                        if (reg.getEmail().equals(email)) {
+                            regFound = reg;
+                            break;
+                        }
+                    }
+                    if (regFound == null) {
+                        System.out.println("Email belum terdaftar.");
+                        continue;
+                    } else if (!regFound.getPassword().equals(password)) {
+                        System.out.println("Email atau password salah.");
+                        continue;
+                    } else {
+                        currentUser = regFound;
+                        System.out.println("Login berhasil. Selamat datang, " + currentUser.getName());
                         break;
                     }
                 }
-                if (found) {
-                    System.out.println("Login berhasil. Selamat datang, " + currentUser.getName());
-                } else {
-                    System.out.println("Login gagal.");
-                }
             } else if (menu == 3) {
-                // Reward
-                if (currentUser == null) {
-                    System.out.println("Silakan login terlebih dahulu.");
+                // Lupa Password (OTP)
+                System.out.print("Masukkan email user: ");
+                String email = scanner.nextLine();
+                Register reg = null;
+                for (Register r : daftarRegister) {
+                    if (r.getEmail().equals(email)) {
+                        reg = r;
+                        break;
+                    }
+                }
+                if (reg == null) {
+                    System.out.println("User tidak ditemukan.");
                     continue;
                 }
-                int choice;
-                do {
-                    System.out.println("\n-------------- MENU REWARD --------------");
-                    System.out.println("Selamat Datang Dihalaman Reward Kami " + currentUser.getName());
-                    System.out.println("Poin Anda saat ini: " + currentUser.getPoints());
-                    System.out.println("1. Gratis Ongkir (100 poin)");
-                    System.out.println("2. Gratis Refil (50 poin)");
-                    System.out.println("3. Promo Diskon (25 poin)");
-                    System.out.println("0. Keluar");
-                    System.out.print("Pilih reward yang ingin ditebus (0/1/2/3): ");
-                    choice = scanner.nextInt();
-                    scanner.nextLine();
-
-                    Reward selectedReward = null;
-                    switch (choice) {
-                        case 1:
-                            selectedReward = rewards[0];
-                            break;
-                        case 2:
-                            selectedReward = rewards[1];
-                            break;
-                        case 3:
-                            selectedReward = rewards[2];
-                            break;
-                        case 0:
-                            System.out.println("Terima kasih telah menggunakan sistem reward.");
-                            break;
-                        default:
-                            System.out.println("Pilihan tidak valid.");
-                            continue;
-                    }
-
-                    if (selectedReward != null) {
-                        System.out.println("\n----------- Proses Redeem ---------------");
-                        selectedReward.redeem(currentUser);
-                        System.out.println("Sisa poin Anda: " + currentUser.getPoints());
-                    }
-                } while (choice != 0);
+                ForgotPassword fp = new ForgotPassword(reg.getId(), reg.getName(), reg.getEmail(), reg.getPassword(), reg.getPhoneNumber(), reg.getGender(), reg.getBirthday());
+                System.out.println("Kode OTP Anda: " + fp.getOTPCode());
+                System.out.print("Masukkan OTP: ");
+                int otp = scanner.nextInt();
+                scanner.nextLine();
+                System.out.print("Masukkan password baru: ");
+                String newPass = scanner.nextLine();
+                fp.resetPasswordWithOTP(otp, newPass);
+                reg.setPassword(newPass);
             } else if (menu == 4) {
-                // Galon
+                System.out.println("Terima kasih telah menggunakan isiAir!");
+                scanner.close();
+                return;
+            } else {
+                System.out.println("Menu tidak tersedia, silahkan pilih sesuai nomor pada menu");
+            }
+        }
+
+        // === MENU UTAMA SETELAH LOGIN ===
+        while (true) {
+            System.out.println("\n===== MENU UTAMA isiAir =====");
+            System.out.println("1. Beli galon");
+            System.out.println("2. Refil galon");
+            System.out.println("3. Pesanan Saya");
+            System.out.println("4. Keranjang");
+            System.out.println("5. Chat");
+            System.out.println("6. Notifikasi");
+            System.out.println("7. Logout");
+            System.out.println("8. Keluar");
+            System.out.print("Pilih menu: ");
+            String menuInput = scanner.nextLine();
+            int menu;
+            try {
+                menu = Integer.parseInt(menuInput);
+            } catch (NumberFormatException e) {
+                System.out.println("Pilihan anda harus angka sesuai yang ada di menu");
+                continue;
+            }
+
+            if (menu == 1) {
+                // Beli galon
                 while (true) {
-                    System.out.println("\n================== MENU GALON ==================");
-                    System.out.println("1. Lihat Daftar Galon");
-                    System.out.println("2. Beli Galon Baru");
-                    System.out.println("3. Refill Galon");
-                    System.out.println("4. Keluar");
-                    System.out.print("Pilih menu (1-4): ");
+                    System.out.println("\n========== DAFTAR GALON ==========");
+                    System.out.printf("| %-3s | %-10s | %-7s | %-18s | %-18s | %-5s |\n",
+                            "ID", "Brand", "Volume", "Harga dengan Galon", "Harga tanpa Galon", "Stok");
+                    System.out.println("-------------------------------------------------------------------------------");
+                    for (Galon g : galons) {
+                        int hargaDenganGalon = g.getPrice();
+                        int hargaTukarGalon = hargaDenganGalon - 30000;
+                        System.out.printf("| %-3d | %-10s | %-7.1f | Rp%-16d | Rp%-16d | %-5d |\n",
+                                g.getId(), g.getBrand(), g.getVolume(), hargaDenganGalon, hargaTukarGalon, g.getStock());
+                    }
+                    System.out.println("\nPilih galon yang ingin dibeli:");
+                    System.out.println("1. Aqua");
+                    System.out.println("2. Club");
+                    System.out.println("3. Ron 88");
+                    System.out.println("4. Lemineral");
+                    System.out.println("5. Kembali ke menu utama");
+                    System.out.print("Pilih menu: ");
                     int pilihan = scanner.nextInt();
                     scanner.nextLine();
-
-                    switch (pilihan) {
-                        case 1:
-                            System.out.println("\n========== DAFTAR GALON ==========");
-                            System.out.printf("| %-3s | %-10s | %-7s | %-10s | %-5s |\n",
-                                    "ID", "Brand", "Volume", "Harga", "Stok");
-                            System.out.println("------------------------------------------------");
-                            for (Galon g : galons) {
-                                g.printInfo();
-                            }
-                            break;
-                        case 2:
-                            System.out.print("\nMasukkan ID galon yang ingin dibeli: ");
-                            int idBeli = scanner.nextInt();
-                            scanner.nextLine();
-                            boolean ditemukan = false;
-                            for (Galon g : galons) {
-                                if (g.getId() == idBeli) {
-                                    ditemukan = true;
-                                    if (g.getStock() > 0) {
-                                        g.reduceStock(1);
-                                        System.out.println("✅ Pembelian berhasil. 1 galon " + g.getBrand() + " telah dibeli.");
-                                    } else {
-                                        System.out.println("❌ Stok habis.");
-                                    }
+                    if (pilihan >= 1 && pilihan <= 4) {
+                        int idBeli = pilihan;
+                        if (pilihan == 4) {
+                            System.out.println("❌ Galon Lemineral belum tersedia.");
+                            continue;
+                        }
+                        System.out.println("1. Dengan galon baru");
+                        System.out.println("2. Tukar galon");
+                        System.out.print("Pilih jenis transaksi: ");
+                        int jenisTransaksi = scanner.nextInt();
+                        scanner.nextLine();
+                        if (jenisTransaksi != 1 && jenisTransaksi != 2) {
+                            System.out.println("Pilihan tidak valid.");
+                            continue;
+                        }
+                        System.out.print("Masukkan jumlah yang ingin dibeli: ");
+                        int jumlahBeli = scanner.nextInt();
+                        scanner.nextLine();
+                        boolean ditemukan = false;
+                        for (Galon g : galons) {
+                            if (g.getId() == idBeli) {
+                                ditemukan = true;
+                                if (g.getStock() >= jumlahBeli) {
+                                    g.reduceStock(jumlahBeli);
+                                    String jenis = (jenisTransaksi == 1) ? "Dengan galon baru" : "Tukar galon";
+                                    String item = g.getBrand() + " x" + jumlahBeli + " (" + jenis + ")";
+                                    keranjang.tambahItem(item);
+                                    daftarPembelianGalon.add(item); // Tambahkan ke daftar pembelian
+                                    System.out.println("pesanan berhasil di tambahkan ke keranjang");
+                                    keranjang.tampilkanKeranjang();
+                                } else {
+                                    System.out.println("❌ Stok tidak mencukupi.");
                                 }
                             }
-                            if (!ditemukan) {
-                                System.out.println("❌ Galon dengan ID tersebut tidak ditemukan.");
-                            }
-                            break;
-                        case 3:
-                            System.out.println("\n========== REFILL GALON ==========");
-                            System.out.printf("| %-3s | %-10s | %-7s | %-10s |\n",
-                                    "ID", "Brand", "Volume", "Harga Refill");
-                            System.out.println("------------------------------------------------");
-                            for (Refill r : refills) {
-                                r.printRefillInfo();
-                            }
-                            System.out.print("\nMasukkan ID galon untuk refill: ");
-                            int idRefill = scanner.nextInt();
-                            System.out.print("Jumlah galon yang ingin direfill: ");
-                            int jumlahRefill = scanner.nextInt();
-                            scanner.nextLine();
-                            System.out.println("Berhasil Refill galon!");
-                            break;
-                        case 4:
-                            System.out.println("Kembali ke menu utama.");
-                            break;
-                        default:
-                            System.out.println("⚠️ Pilihan tidak valid. Silakan coba lagi.");
+                        }
+                        if (!ditemukan) {
+                            System.out.println("❌ Galon dengan ID tersebut tidak ditemukan.");
+                        }
+                    } else if (pilihan == 5) {
+                        break;
+                    } else {
+                        System.out.println("⚠️ Pilihan tidak valid. Silakan coba lagi.");
                     }
-                    if (pilihan == 4) break;
                 }
-            } else if (menu == 5) {
-                // Delivery Status
+            } else if (menu == 2) {
+                // Refil galon
+                while (true) {
+                    System.out.println("\n========== REFILL GALON ==========");
+                    System.out.printf("| %-3s | %-10s | %-7s | %-10s |\n",
+                            "ID", "Brand", "Volume", "Harga Refill");
+                    System.out.println("------------------------------------------------");
+                    for (Refill r : refills) {
+                        r.printRefillInfo();
+                    }
+                    System.out.print("\nMasukkan ID galon untuk refill: ");
+                    int idRefill = scanner.nextInt();
+                    System.out.print("Jumlah galon yang ingin direfill: ");
+                    int jumlahRefill = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Berhasil Refill galon!");
+                    break;
+                }
+            } else if (menu == 3) {
+                // Pesanan Saya
                 while (true) {
                     System.out.print("Masukkan ID Pesanan (tekan ENTER untuk kembali): ");
                     String input = scanner.nextLine();
@@ -231,126 +431,295 @@ public class Main {
                     }
                     System.out.println("Terima kasih!");
                 }
-            } else if (menu == 6) {
-                // Lupa Password (OTP)
-                System.out.print("Masukkan nama user: ");
-                String name = scanner.nextLine();
-                Register reg = null;
-                for (Register r : daftarRegister) {
-                    if (r.getName().equals(name)) {
-                        reg = r;
+            } else if (menu == 4) {
+                // Keranjang
+                while (true) {
+                    System.out.println("\n===== KERANJANG ANDA =====");
+                    keranjang.tampilkanKeranjang(daftarPembelianGalon, galons);
+                    if (daftarPembelianGalon.isEmpty()) {
+                        System.out.println("keranjang kosong");
+                    }
+                    System.out.println("1. Checkout");
+                    System.out.println("2. Kembali");
+                    System.out.print("Pilih menu: ");
+                    String pilihKeranjang = scanner.nextLine();
+                    if (pilihKeranjang.equals("1")) {
+                        if (daftarPembelianGalon.isEmpty()) {
+                            System.out.println("keranjang kosong");
+                        } else {
+                            System.out.println("Checkout berhasil. Terima kasih telah berbelanja!");
+                            daftarPembelianGalon.clear();
+                        }
+                    } else if (pilihKeranjang.equals("2")) {
                         break;
+                    } else {
+                        System.out.println("Pilihan tidak valid.");
                     }
                 }
-                if (reg == null) {
-                    System.out.println("User tidak ditemukan.");
-                    continue;
-                }
-                ForgotPassword fp = new ForgotPassword(reg.getId(), reg.getName(), reg.getEmail(), reg.getPassword(), reg.getPhoneNumber(), reg.getGender(), reg.getBirthday());
-                System.out.println("Kode OTP Anda: " + fp.getOTPCode());
-                System.out.print("Masukkan OTP: ");
-                int otp = scanner.nextInt();
-                scanner.nextLine();
-                System.out.print("Masukkan password baru: ");
-                String newPass = scanner.nextLine();
-                fp.resetPasswordWithOTP(otp, newPass);
-                reg.setPassword(newPass);
+            } else if (menu == 5) {
+                // Chat
+                System.out.println("Fitur chat belum tersedia.");
+            } else if (menu == 6) {
+                // Notifikasi
+                System.out.println("Fitur notifikasi belum tersedia.");
             } else if (menu == 7) {
-                // Demo Notifikasi & Pembayaran (gabungan MainNotifikasiPembayaran)
-                System.out.println("--- Menguji Notification ---");
-                Notification notif1 = new Notification(1, "Budi", "Pesanan Anda telah dikirim.", new Date());
-                notif1.send();
-                notif1.printInfo();
-
-                Notification notif2 = new Notification(2, "Ani", "Ada promo spesial untuk Anda!", null);
-                notif2.send();
-                notif2.printInfo();
-
-                System.out.println("\n--- Menguji Pembayaran ---");
-                Pembayaran pembayaran1 = new Pembayaran(150000, "Transfer Bank", "2024-06-01", 1);
-                pembayaran1.prosesPembayaran();
-                System.out.println("Harga: " + pembayaran1.getPrice());
-                System.out.println("Metode Pembayaran: " + pembayaran1.getMetodePembayaran());
-                System.out.println("Status: " + pembayaran1.getStatus());
-                pembayaran1.printInfo();
-
-                System.out.println("\n--- Menguji QRIS ---");
-                QRIS qris1 = new QRIS(75000, "QRIS", "2024-06-01", 2, 123456789);
-                qris1.prosesPembayaran();
-                qris1.tampilkanQr();
-                qris1.verifikasiPembayaran();
-                qris1.printInfo();
-                System.out.println("Harga QRIS: " + qris1.getPrice());
-                System.out.println("Metode Pembayaran QRIS: " + qris1.getMetodePembayaran());
-                System.out.println("Status QRIS: " + qris1.getStatus());
-            } else if (menu == 8) {
-                // Demo Galon (gabungan Maingalon.java)
-                int pilihan;
-                do {
-                    System.out.println("\n================== DEMO MENU GALON ==================");
-                    System.out.println("1. Lihat Daftar Galon");
-                    System.out.println("2. Beli Galon Baru");
-                    System.out.println("3. Refill Galon");
+                // Logout
+                System.out.println("Anda telah logout.");
+                currentUser = null;
+                // Kembali ke login/register
+                while (currentUser == null) {
+                    System.out.println("\n===== SELAMAT DATANG DI isiAir =====");
+                    System.out.println("1. Register");
+                    System.out.println("2. Login");
+                    System.out.println("3. Lupa Password");
                     System.out.println("4. Keluar");
-                    System.out.print("Pilih menu (1-4): ");
-                    pilihan = scanner.nextInt();
-                    scanner.nextLine();
+                    System.out.print("Pilih menu: ");
+                    String menuInputLogout = scanner.nextLine();
+                    int menuLogout;
+                    try {
+                        menuLogout = Integer.parseInt(menuInputLogout);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Pilihan anda harus angka sesuai yang ada di menu");
+                        continue;
+                    }
 
-                    switch (pilihan) {
-                        case 1:
-                            System.out.println("\n========== DAFTAR GALON ==========");
-                            System.out.printf("| %-3s | %-10s | %-7s | %-10s | %-5s |\n",
-                                    "ID", "Brand", "Volume", "Harga", "Stok");
-                            System.out.println("------------------------------------------------");
-                            for (Galon g : galons) {
-                                g.printInfo();
+                    if (menuLogout == 1) {
+                        // Register
+                        try {
+                            String name;
+                            while (true) {
+                                System.out.print("Nama: ");
+                                name = scanner.nextLine();
+                                if (name.isEmpty()) {
+                                    System.out.println("Nama tidak boleh kosong, Harap isi terlebih dahulu");
+                                } else {
+                                    break;
+                                }
                             }
-                            break;
-                        case 2:
-                            System.out.print("\nMasukkan ID galon yang ingin dibeli: ");
-                            int idBeli = scanner.nextInt();
-                            boolean ditemukan = false;
-                            for (Galon g : galons) {
-                                if (g.getId() == idBeli) {
-                                    ditemukan = true;
-                                    if (g.getStock() > 0) {
-                                        g.reduceStock(1);
-                                        System.out.println("✅ Pembelian berhasil. 1 galon " + g.getBrand() + " telah dibeli.");
+                            String email;
+                            while (true) {
+                                System.out.print("Email (gunakan @gmail.com): ");
+                                email = scanner.nextLine();
+                                if (email.isEmpty()) {
+                                    System.out.println("Email tidak boleh kosong, Harap isi terlebih dahulu");
+                                } else if (!email.endsWith("@gmail.com")) {
+                                    System.out.println("Email harus menggunakan domain @gmail.com");
+                                } else {
+                                    boolean emailExists = false;
+                                    for (Register reg : daftarRegister) {
+                                        if (reg.getEmail().equals(email)) {
+                                            emailExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (emailExists) {
+                                        System.out.println("Email sudah terdaftar, silakan gunakan email lain.");
                                     } else {
-                                        System.out.println("❌ Stok habis.");
+                                        break;
                                     }
                                 }
                             }
-                            if (!ditemukan) {
-                                System.out.println("❌ Galon dengan ID tersebut tidak ditemukan.");
+                            String address;
+                            while (true) {
+                                System.out.print("Alamat: ");
+                                address = scanner.nextLine();
+                                if (address.isEmpty()) {
+                                    System.out.println("Alamat tidak boleh kosong, Harap isi terlebih dahulu");
+                                } else {
+                                    break;
+                                }
                             }
-                            break;
-                        case 3:
-                            System.out.println("\n========== REFILL GALON ==========");
-                            System.out.printf("| %-3s | %-10s | %-7s | %-10s |\n",
-                                    "ID", "Brand", "Volume", "Harga Refill");
-                            System.out.println("------------------------------------------------");
-                            for (Refill r : refills) {
-                                r.printRefillInfo();
+                            String password;
+                            while (true) {
+                                System.out.print("Password: ");
+                                password = scanner.nextLine();
+                                if (password.isEmpty()) {
+                                    System.out.println("Password tidak boleh kosong, Harap isi terlebih dahulu");
+                                } else {
+                                    break;
+                                }
                             }
-                            System.out.print("\nMasukkan ID galon untuk refill: ");
-                            int idRefill = scanner.nextInt();
-                            System.out.print("Jumlah galon yang ingin direfill: ");
-                            int jumlahRefill = scanner.nextInt();
-                            System.out.println("Berhasil Refill galon!");
-                            break;
-                        case 4:
-                            System.out.println("Terima kasih telah menggunakan layanan Demo Galon!");
-                            break;
-                        default:
-                            System.out.println("⚠️ Pilihan tidak valid. Silakan coba lagi.");
+                            String phoneInput2;
+                            long phoneNumber2;
+                            while (true) {
+                                System.out.print("Nomor Telepon: ");
+                                phoneInput2 = scanner.nextLine();
+                                if (phoneInput2.isEmpty()) {
+                                    System.out.println("Nomor Telepon tidak boleh kosong, Harap isi terlebih dahulu");
+                                    continue;
+                                }
+                                if (!phoneInput2.matches("\\d+")) {
+                                    System.out.println("Harap masukan nomor telepon yang benar");
+                                    continue;
+                                }
+                                if (phoneInput2.length() > 13) {
+                                    System.out.println("Maksimal nomor telepon hanya 13 digit");
+                                    continue;
+                                }
+                                boolean phoneExists = false;
+                                for (Register reg : daftarRegister) {
+                                    if (String.valueOf(reg.getPhoneNumber()).equals(phoneInput2)) {
+                                        phoneExists = true;
+                                        break;
+                                    }
+                                }
+                                if (phoneExists) {
+                                    System.out.println("nomor telepon sudah digunakan");
+                                    continue;
+                                }
+                                try {
+                                    phoneNumber2 = Long.parseLong(phoneInput2);
+                                    break;
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Nomor telepon tidak valid. Gunakan hanya angka.");
+                                }
+                            }
+                            String genderInput;
+                            char gender;
+                            while (true) {
+                                System.out.print("Jenis Kelamin (L/P): ");
+                                genderInput = scanner.nextLine();
+                                if (genderInput.isEmpty()) {
+                                    System.out.println("Jenis Kelamin tidak boleh kosong, Harap isi terlebih dahulu");
+                                    continue;
+                                }
+                                char genderChar = Character.toUpperCase(genderInput.charAt(0));
+                                if (genderChar != 'L' && genderChar != 'P') {
+                                    System.out.println("Yang anda masukan tidak valid, Harap masukaln (L/P)");
+                                    continue;
+                                }
+                                gender = genderChar;
+                                break;
+                            }
+                            String birthday;
+                            while (true) {
+                                System.out.print("Tanggal Lahir (yyyy-mm-dd): ");
+                                birthday = scanner.nextLine();
+                                if (birthday.isEmpty()) {
+                                    System.out.println("Tanggal Lahir tidak boleh kosong, Harap isi terlebih dahulu");
+                                    continue;
+                                }
+                                // Hilangkan semua karakter selain angka
+                                String digitsOnly = birthday.replaceAll("[^0-9]", "");
+                                if (digitsOnly.length() != 8) {
+                                    System.out.println("Tanggal lahir harus 8 digit angka (format: yyyy-mm-dd atau yyyymmdd)");
+                                    continue;
+                                }
+                                if (!digitsOnly.matches("\\d{8}")) {
+                                    System.out.println("Tanggal lahir harus berupa angka");
+                                    continue;
+                                }
+                                // Jika user tidak pakai '-', formatkan ke yyyy-mm-dd
+                                if (!birthday.contains("-")) {
+                                    birthday = digitsOnly.substring(0, 4) + "-" + digitsOnly.substring(4, 6) + "-" + digitsOnly.substring(6, 8);
+                                }
+                                break;
+                            }
+
+                            Register reg = new Register(
+                                daftarRegister.size() + 1, // id
+                                name,
+                                email,
+                                password,
+                                phoneNumber2, // gunakan long, jangan cast ke int
+                                gender,
+                                birthday,
+                                address
+                            );
+                            daftarRegister.add(reg);
+                            reg.printInfo();
+                            System.out.println("Silakan login untuk melanjutkan.");
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                    } else if (menuLogout == 2) {
+                        // Login
+                        while (true) {
+                            System.out.println("Ketik 0 pada Email atau Password untuk kembali.");
+                            String email;
+                            while (true) {
+                                System.out.print("Email: ");
+                                email = scanner.nextLine();
+                                if (email.equals("0")) break;
+                                if (email.isEmpty()) {
+                                    System.out.println("email tidak boleh kosong");
+                                    continue;
+                                }
+                                if (!email.endsWith("@gmail.com")) {
+                                    System.out.println("harus menggunakan domain @gmail.com");
+                                    continue;
+                                }
+                                break;
+                            }
+                            if (email.equals("0")) break;
+                            String password;
+                            while (true) {
+                                System.out.print("Password: ");
+                                password = scanner.nextLine();
+                                if (password.equals("0")) break;
+                                if (password.isEmpty()) {
+                                    System.out.println("password tidak boleh kosong");
+                                    continue;
+                                }
+                                break;
+                            }
+                            if (password.equals("0")) break;
+                            Register regFound = null;
+                            for (Register reg : daftarRegister) {
+                                if (reg.getEmail().equals(email)) {
+                                    regFound = reg;
+                                    break;
+                                }
+                            }
+                            if (regFound == null) {
+                                System.out.println("Email belum terdaftar.");
+                                continue;
+                            } else if (!regFound.getPassword().equals(password)) {
+                                System.out.println("Email atau password salah.");
+                                continue;
+                            } else {
+                                currentUser = regFound;
+                                System.out.println("Login berhasil. Selamat datang, " + currentUser.getName());
+                                break;
+                            }
+                        }
+                    } else if (menuLogout == 3) {
+                        // Lupa Password (OTP)
+                        System.out.print("Masukkan email user: ");
+                        String email = scanner.nextLine();
+                        Register reg = null;
+                        for (Register r : daftarRegister) {
+                            if (r.getEmail().equals(email)) {
+                                reg = r;
+                                break;
+                            }
+                        }
+                        if (reg == null) {
+                            System.out.println("User tidak ditemukan.");
+                            continue;
+                        }
+                        ForgotPassword fp = new ForgotPassword(reg.getId(), reg.getName(), reg.getEmail(), reg.getPassword(), reg.getPhoneNumber(), reg.getGender(), reg.getBirthday());
+                        System.out.println("Kode OTP Anda: " + fp.getOTPCode());
+                        System.out.print("Masukkan OTP: ");
+                        int otp = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.print("Masukkan password baru: ");
+                        String newPass = scanner.nextLine();
+                        fp.resetPasswordWithOTP(otp, newPass);
+                        reg.setPassword(newPass);
+                    } else if (menuLogout == 4) {
+                        System.out.println("Terima kasih telah menggunakan isiAir!");
+                        scanner.close();
+                        return;
+                    } else {
+                        System.out.println("Menu tidak tersedia, silahkan pilih sesuai nomor pada menu");
                     }
-                } while (pilihan != 4);
-            } else if (menu == 9) {
+                }
+            } else if (menu == 8) {
                 System.out.println("Terima kasih telah menggunakan isiAir!");
                 break;
             } else {
-                System.out.println("Pilihan tidak valid.");
+                System.out.println("Menu tidak tersedia, silahkan pilih sesuai nomor pada menu");
             }
         }
         scanner.close();

@@ -1,17 +1,15 @@
 import java.util.ArrayList;
 
-public class Register extends User implements Identity {
+public class Register extends User {
     private String address;
     
     private static ArrayList<String> registeredNames = new ArrayList<>();
 
-    public Register(int id, String name, String email, String password, int phoneNumber, char gender, String birthday, String address) throws Exception {
+    // Ubah tipe phoneNumber dari int ke long di konstruktor
+    public Register(int id, String name, String email, String password, long phoneNumber, char gender, String birthday, String address) throws Exception {
         super(id, name, email, password, phoneNumber, gender, birthday);
         if (!email.endsWith("@gmail.com")) {
             throw new Exception("Email harus menggunakan domain @gmail.com");
-        }
-        if (AlreadyUse(name)) {
-            throw new Exception("Nama ini sudah digunakan.");
         }
         this.address = address;
         registeredNames.add(name);
@@ -24,16 +22,15 @@ public class Register extends User implements Identity {
         if (!email.endsWith("@gmail.com")) {
             throw new Exception("Email harus menggunakan domain @gmail.com");
         }
-        if (AlreadyUse(name)) {
-            throw new Exception("Nama ini sudah digunakan.");
-        }
+        // Hapus pemeriksaan nama unik
         this.address = address;
         registeredNames.add(name);
         System.out.println("Registrasi berhasil.");
     }
 
     public static boolean AlreadyUse(String name) {
-        return registeredNames.contains(name);
+        // Tidak perlu lagi digunakan, tapi tetap ada untuk kompatibilitas
+        return false;
     }
 
     public String getAddress() {
