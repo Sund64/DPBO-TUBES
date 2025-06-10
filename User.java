@@ -1,10 +1,10 @@
 public class User extends Profile {
-    private int phoneNumber;
+    private String phoneNumber;
     private char gender;
     private String birthday;
-    private int points; // Tambahan untuk sistem reward
+    private int points;
 
-    public User(int id, String name, String email, String password, int phoneNumber, char gender, String birthday) {
+    public User(int id, String name, String email, String password, String phoneNumber, char gender, String birthday) {
         super(id, name, email, password);
         this.phoneNumber = phoneNumber;
         this.gender = gender;
@@ -12,40 +12,11 @@ public class User extends Profile {
         this.points = 0;
     }
 
-    // Konstruktor tambahan untuk Reward demo
-    public User(int id, String name, String email, int points) {
-        super(id, name, email, "");
-        this.phoneNumber = 0;
-        this.gender = 'U';
-        this.birthday = "";
-        this.points = points;
-    }
-
-    @Override
-    public int getId() {
-        return super.getId();
-    }
-
-    @Override
-    public String getName() {
-        return super.getName();
-    }
-
-    @Override
-    public String getEmail() {
-        return super.getEmail();
-    }
-
-    @Override
-    public String getPassword() {
-        return super.getPassword();
-    }
-
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -65,7 +36,6 @@ public class User extends Profile {
         this.birthday = birthday;
     }
 
-    // Reward system
     public int getPoints() {
         return points;
     }
