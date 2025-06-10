@@ -1,4 +1,4 @@
-public class User extends Profile implements Identity {
+public class User extends Profile {
     private int phoneNumber;
     private char gender;
     private String birthday;
